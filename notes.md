@@ -57,3 +57,31 @@ def hello():
     return 'Hello, World'
 ```
 
+## Returning JSON
+
+you can return json like this 
+```
+@app.route("/health")
+def hello_health():
+    return {
+        "docker": {"status": "Ok", "Uptime": "200hr"},
+    }
+    # "<h1> Service Health </h1>",
+
+```
+looks like this 
+```
+➜  homelab-dashboard git:(main) ✗ curl http://127.0.0.1:5000/health
+{
+  "docker": {
+    "Uptime": "200hr",
+    "status": "Ok"
+  }
+}
+➜  homelab-dashboard git:(main) ✗   
+```
+
+## Flask Application Factory
+From my understanding this allows you to provision/scaffold the app's 
+creation with a create app function allowing you to pass in blueprints
+or config files -- what those look like idk currently. 
