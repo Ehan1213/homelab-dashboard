@@ -2,8 +2,9 @@
 [Flask Quickstart](https://flask.palletsprojects.com/en/stable/quickstart/)
 [Application Factories](https://flask.palletsprojects.com/en/stable/patterns/appfactories/)
 [Blueprints](https://flask.palletsprojects.com/en/stable/blueprints/)
-[SQL Alchemy](https://flask-sqlalchemy.readthedocs.io/en/stable/)
-
+[Flask SQL Alchemy](https://flask-sqlalchemy.readthedocs.io/en/stable/)
+[SQL Alchemy](https://docs.sqlalchemy.org/en/20/tutorial/index.html)
+[Postgres Image](https://hub.docker.com/_/postgres)
 
 
 

@@ -1,6 +1,4 @@
 import os
 
-DB_URL = os.getenv("DB_URL", "localhost")
-API_KEY = os.getenv("API_KEY")
-
-print(DB_URL)
+SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+LOCALHOST_CONNECTION_URL = os.getenv("LOCALHOST_CONNECTIOON_URL")

@@ -10,9 +10,9 @@ def create_app():
     app = Flask(__name__)
     app.config.from_pyfile("config.py")
 
-    # from models import db
+    from models import db
 
-    # db.init_app(app)
+    db.init_app(app)
 
     app.register_blueprint(health)
     return app
@@ -23,7 +23,4 @@ app = create_app()
 
 @app.route("/")
 def hello_world():
-    return f"API_KEY = {app.config.get('SECRET_KEY')}"
-
-
-print(app.config)
+    return "<p>Hello World</p>"
