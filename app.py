@@ -15,12 +15,5 @@ def create_app():
     db.init_app(app)
 
     app.register_blueprint(health)
-    return app
-
-
-app = create_app()
-
-
-@app.route("/")
-def hello_world():
-    return "<p>Hello World</p>"
+    with app.app_context():
+        db.create_all()
