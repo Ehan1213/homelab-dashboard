@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: ./flask-app.dockerfile
+    ports:
+      - "5000:5000"
     depends_on:
       db:
         condition: service_healthy

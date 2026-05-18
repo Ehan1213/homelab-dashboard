@@ -11,7 +11,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 FROM ghcr.io/astral-sh/uv:python3.13-alpine AS runtime
 WORKDIR /app
-COPY --from=builder /app /app
+RUN addgroup -S app && adduser -S app -G app
+COPY --from=builder --chown=app:app /app /app
+USER app
 ENV PATH="/app/.venv/bin:$PATH"
 EXPOSE 5000
 CMD ["gunicorn", "--bind", "0.0.0.0:5000", "run:app"]
