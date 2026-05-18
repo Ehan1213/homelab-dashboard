@@ -5,7 +5,7 @@ services:
   flask:
     build:
       context: .
-      dockerfile: ./flask-app.dockerfile
+      dockerfile: app/flask-app.dockerfile
     ports:
       - "5000:5000"
     depends_on:

@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 
-from models import db
+from app.models import db
 
 health = Blueprint("health", __name__)
 

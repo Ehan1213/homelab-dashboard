@@ -21,7 +21,7 @@ class TestConfig(unittest.TestCase):
 
         load_dotenv()
 
-        from app import create_app
+        from app.app import create_app
 
         self.app = create_app()
 
