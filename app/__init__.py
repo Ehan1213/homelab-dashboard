@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 from flask import Flask
-from flask_migrate import Migrate
 
 from app.blueprints.health import health
+from app.blueprints.services import services
 
 load_dotenv()
 
@@ -16,8 +16,8 @@ def create_app():
     db.init_app(app)
 
     app.register_blueprint(health)
+    app.register_blueprint(services)
     with app.app_context():
-        Migrate(app, db)
-        # db.create_all()
+        db.create_all()
 
     return app
