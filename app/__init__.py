@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from flask import Flask
+from flask_migrate import Migrate
 
 from app.blueprints.health import health
 
@@ -16,6 +17,7 @@ def create_app():
 
     app.register_blueprint(health)
     with app.app_context():
-        db.create_all()
+        Migrate(app, db)
+        # db.create_all()
 
     return app
