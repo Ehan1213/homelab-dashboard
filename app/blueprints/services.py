@@ -26,8 +26,8 @@ def services_list():
 
         try:
             validated = ValidateService(**data)
-        except ValidationError:
-            return jsonify("Malformed JSON"), 400
+        except ValidationError as err:
+            return jsonify(err.errors()), 400
 
         service = Service(
             name=validated.name,
@@ -68,16 +68,16 @@ def checks_by_id(service_id):
     if request.method == "POST":
         data = request.get_json(silent=True)
         if data is None:
-            return jsonify(ValidationError.errors()), 400
+            return jsonify("Malformed JSON"), 400
 
         try:
             validated = ValidateCheck(**data)
-        except ValidationError:
-            return jsonify(ValidationError.errors()), 400
+        except ValidationError as err:
+            return jsonify(err.errors()), 400
 
         check = Check(
             status=validated.status,
-            response_time=validated.response_time,
+            response_time_ms=validated.response_time_ms,
             service_id=service_id,
         )
         db.session.add(check)
