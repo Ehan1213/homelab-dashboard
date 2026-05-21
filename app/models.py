@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Enum, ForeignKey
+from sqlalchemy import Enum, ForeignKey, desc
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -39,7 +39,7 @@ class Service(db.Model):
         latest = db.session.execute(
             db.select(Check)
             .where(Check.service_id == self.id)
-            .order_by(Check.created_at.desc())
+            .order_by(desc(Check.created_at))
         ).scalar()
         return {
             "id": str(self.id),

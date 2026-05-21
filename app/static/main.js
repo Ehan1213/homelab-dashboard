@@ -161,6 +161,7 @@ function renderServices(data) {
             console.log('submit checks:', checks);
             console.log('submit ul:', ul);
             renderChecks(ul, checks);
+            renderServices(await getServices())
             checkForm.style.display = 'none'
 
         });

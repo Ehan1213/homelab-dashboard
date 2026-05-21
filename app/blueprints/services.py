@@ -59,7 +59,7 @@ def checks_by_id(service_id):
             checks = db.session.execute(
                 db.select(Check)
                 .where(Check.service_id == service_id)
-                .order_by(Check.created_at)
+                .order_by(Check.created_at.desc())
                 .limit(10)
             ).scalars()
             return jsonify([check.to_dict() for check in checks]), 200
