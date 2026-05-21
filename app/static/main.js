@@ -1,5 +1,7 @@
+const baseUrl = "http://localhost/api"
+
 async function getServices() {
-    const url = "http://127.0.0.1:5000/services";
+    const url = `${baseUrl}/services`;
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -18,7 +20,7 @@ async function getServices() {
 
 
 async function getServiceChecks(uuid) {
-    const url = `http://127.0.0.1:5000/services/${uuid}/checks`;
+    const url = `${baseUrl}${uuid}/checks`;
 
     try {
         const response = await fetch(url);
@@ -36,7 +38,7 @@ async function getServiceChecks(uuid) {
 
 
 async function postServiceChecks(uuid, status = 'up', response_time = null) {
-    const url = `http://127.0.0.1:5000/services/${uuid}/checks`;
+    const url = `${baseUrl}/services/${uuid}/checks`;
 
     try {
         const response = await fetch(url, {
@@ -116,7 +118,7 @@ function renderChecks(ul, checks) {
 }
 
 async function postForm(formData) {
-    const url = `http://127.0.0.1:5000/services`;
+    const url = `${baseUrl}/services`;
 
     try {
         const response = await fetch(url, {

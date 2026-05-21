@@ -1,0 +1,5 @@
+.venv
+*.md
+pip-flask-app.dockerfile
+tests.py
+.env
