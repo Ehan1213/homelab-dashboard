@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+from flask_cors import cross_origin
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 
@@ -13,6 +14,7 @@ def hello_health():
 
 
 @health.route("/readiness")
+@cross_origin()
 def query_db_readiness():
     try:
         db.session.execute(text("SELECT 1")).scalar()

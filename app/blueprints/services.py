@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from flask_cors import cross_origin
 from pydantic import ValidationError
 from sqlalchemy.exc import OperationalError
 
@@ -9,6 +10,7 @@ services = Blueprint("service", __name__)
 
 
 @services.route("/services", methods=["GET", "POST"])
+@cross_origin()
 def services_list():
     if request.method == "GET":
         try:
@@ -38,6 +40,7 @@ def services_list():
 
 
 @services.route("/services/<uuid:service_id>", methods=["GET"])
+@cross_origin()
 def service_by_id(service_id):
     service = db.get_or_404(Service, service_id)
     return jsonify(service.to_dict())
@@ -47,6 +50,7 @@ def service_by_id(service_id):
     "/services/<uuid:service_id>/checks",
     methods=["GET", "POST"],
 )
+@cross_origin()
 def checks_by_id(service_id):
     if request.method == "GET":
         # check if service exists before further querying
