@@ -8,3 +8,4 @@ vanilla js frontend to display key health info about my running services.
 
 # Future Work
 - Add joinedload for related service data on check queries
+- Python Background worker
