@@ -60,6 +60,7 @@ def checks_by_id(service_id):
                 db.select(Check)
                 .where(Check.service_id == service_id)
                 .order_by(Check.created_at)
+                .limit(10)
             ).scalars()
             return jsonify([check.to_dict() for check in checks]), 200
         except OperationalError as err:

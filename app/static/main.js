@@ -3,6 +3,7 @@ const baseUrl = "http://localhost/api"
 async function getServices() {
     const url = `${baseUrl}/services`;
     try {
+        clearError()
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Response status:  ${response.status}`);
@@ -12,7 +13,7 @@ async function getServices() {
         console.log(result);
         return result;
     } catch (error) {
-        console.error(error.message);
+        showError(error.message);
         return []
     }
 };
@@ -23,6 +24,7 @@ async function getServiceChecks(uuid) {
     const url = `${baseUrl}${uuid}/checks`;
 
     try {
+        clearError()
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Response status:  ${response.status}`);
@@ -32,7 +34,7 @@ async function getServiceChecks(uuid) {
         console.log(result);
         return result
     } catch (error) {
-        console.error(error.message);
+        showError(error.message);
     }
 };
 
@@ -41,6 +43,7 @@ async function postServiceChecks(uuid, status = 'up', response_time = null) {
     const url = `${baseUrl}/services/${uuid}/checks`;
 
     try {
+        clearError()
         const response = await fetch(url, {
             method: "POST",
             body: JSON.stringify({ status: status, response_time: response_time }),
@@ -57,7 +60,7 @@ async function postServiceChecks(uuid, status = 'up', response_time = null) {
         return result
 
     } catch (error) {
-        console.error(error.message);
+        showError(error.message);
     }
 };
 
@@ -79,7 +82,31 @@ function renderServices(data) {
         const item = document.createElement('details');
         item.dataset.serviceId = service.id;
         const summary = document.createElement('summary');
-        summary.textContent = `${service.name} ${service.url}`;
+        const spanStatus = document.createElement('span')
+        if (service.latest_check) {
+            spanStatus.textContent = service.latest_check.status
+            switch (service.latest_check.status) {
+                case 'up': {
+                    spanStatus.style.color = "green"
+
+                }
+                case 'down': {
+                    spanStatus.style.color = "red"
+
+                }
+                case 'degraded': {
+                    spanStatus.style.color = "orange"
+
+                }
+            }
+            const spanTime = document.createElement('span')
+            spanTime.textContent = service.latest_check.created_at
+            summary.textContent = `${service.name} ${service.url} ${spanStatus} ${spanTime}`
+
+        } else {
+            summary.textContent = `${service.name} ${service.url}`;
+        }
+
         item.appendChild(summary)
         const ul = item.appendChild(document.createElement('ul'));
         ul.className = "checks-list";
@@ -89,10 +116,11 @@ function renderServices(data) {
                 return
             };
             const uuid = event.target.dataset.serviceId;
-            let ul = event.target.querySelector('.checks-list');
+            const ul = event.target.querySelector('.checks-list');
             if (ul.children.length > 0) {
                 return
             }
+            ul.textContent = 'Loading checks...'
             const checks = await getServiceChecks(uuid);
             renderChecks(ul, checks);
         });
@@ -117,10 +145,22 @@ function renderChecks(ul, checks) {
     return
 }
 
+function showError(message) {
+    const banner = document.querySelector('#error-banner');
+    banner.textContent = message;
+    banner.style.dissplay = 'block';
+}
+
+function clearError() {
+    const banner = document.querySelector('#error-banner');
+    banner.textContent = '';
+}
+
 async function postForm(formData) {
     const url = `${baseUrl}/services`;
 
     try {
+        clearError()
         const response = await fetch(url, {
             method: "POST",
             body: JSON.stringify({ name: formData.get('name'), url: formData.get('url'), check_interval_seconds: Number(formData.get('check_interval_seconds')) }),
@@ -137,14 +177,16 @@ async function postForm(formData) {
         return result
 
     } catch (error) {
-        console.error(error.message);
+        showError(error.message);
     }
 
 
 }
 
 window.addEventListener("load", async () => {
-    renderServices(await getServices())
+    const container = document.querySelector('#services-container');
+    container.textContent = 'Loading...'
+    renderServices(await getServices());
     const form = document.getElementById('add-service-form');
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
