@@ -10,7 +10,6 @@ async function getServices() {
         }
 
         const result = await response.json();
-        console.log(result);
         return result;
     } catch (error) {
         showError(error.message);
@@ -21,7 +20,7 @@ async function getServices() {
 
 
 async function getServiceChecks(uuid) {
-    const url = `${baseUrl}${uuid}/checks`;
+    const url = `${baseUrl}/services/${uuid}/checks`;
 
     try {
         clearError()
@@ -35,18 +34,19 @@ async function getServiceChecks(uuid) {
         return result
     } catch (error) {
         showError(error.message);
+        return []
     }
 };
 
 
-async function postServiceChecks(uuid, status = 'up', response_time = null) {
+async function postServiceChecks(uuid, status = 'up', response_time_ms = null) {
     const url = `${baseUrl}/services/${uuid}/checks`;
 
     try {
         clearError()
         const response = await fetch(url, {
             method: "POST",
-            body: JSON.stringify({ status: status, response_time: response_time }),
+            body: JSON.stringify({ status: status, response_time_ms: response_time_ms }),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -57,7 +57,7 @@ async function postServiceChecks(uuid, status = 'up', response_time = null) {
         }
         const result = await response.json();
         console.log(result);
-        return result
+        return result;
 
     } catch (error) {
         showError(error.message);
@@ -72,64 +72,121 @@ function renderServices(data) {
     };
     container.replaceChildren();
     if (data.length == 0) {
-        const item = document.createElement('li');
-        item.textContent = "No Services added yet";
-        container.appendChild(item);
+        const details = document.createElement('li');
+        details.textContent = "No Services added yet";
+        container.appendChild(details);
         return
     }
 
     for (let service of data) {
-        const item = document.createElement('details');
-        item.dataset.serviceId = service.id;
+        const details = document.createElement('details');
+        details.dataset.serviceId = service.id;
         const summary = document.createElement('summary');
         const spanStatus = document.createElement('span')
         if (service.latest_check) {
-            spanStatus.textContent = service.latest_check.status
+            spanStatus.textContent = ' ' + service.latest_check.status + ' ';
             switch (service.latest_check.status) {
                 case 'up': {
                     spanStatus.style.color = "green"
-
+                    break
                 }
                 case 'down': {
                     spanStatus.style.color = "red"
-
+                    break
                 }
                 case 'degraded': {
                     spanStatus.style.color = "orange"
-
+                    break
                 }
             }
-            const spanTime = document.createElement('span')
-            spanTime.textContent = service.latest_check.created_at
-            summary.textContent = `${service.name} ${service.url} ${spanStatus} ${spanTime}`
+            summary.textContent = `${service.name} ${service.url}`
+            spanStatus.style.marginLeft = '8px';
 
+            summary.appendChild(spanStatus)
+
+            const spanTime = document.createElement('span')
+            spanTime.textContent = ' ' + service.latest_check.created_at + ' ';
+            spanTime.style.marginLeft = '8px'
+            summary.appendChild(spanTime)
         } else {
             summary.textContent = `${service.name} ${service.url}`;
         }
+        details.appendChild(summary);
 
-        item.appendChild(summary)
-        const ul = item.appendChild(document.createElement('ul'));
+        const ul = document.createElement('ul');
         ul.className = "checks-list";
+        details.appendChild(ul);
 
-        item.addEventListener("toggle", async (event) => {
+        const recordBtn = document.createElement('button');
+        recordBtn.textContent = 'Record Check';
+        details.appendChild(recordBtn);
+
+        const checkForm = document.createElement('div');
+        checkForm.style.display = 'none';
+
+        const select = document.createElement('select');
+        const opt1 = document.createElement('option');
+        opt1.value = 'up', opt1.textContent = 'up';
+        select.appendChild(opt1);
+        const opt2 = document.createElement('option');
+        opt2.value = 'down', opt2.textContent = 'down';
+        select.appendChild(opt2);
+        const opt3 = document.createElement('option');
+        opt3.value = 'degraded', opt3.textContent = 'degraded';
+        select.appendChild(opt3);
+        const rtInput = document.createElement('input');
+        rtInput.type = 'number';
+        rtInput.placeholder = 'Response time (ms)';
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = 'Submit'
+        checkForm.appendChild(select);
+        checkForm.appendChild(rtInput);
+        checkForm.appendChild(submitBtn);
+        details.append(checkForm);
+
+        recordBtn.addEventListener('click', (event) => {
+            if (checkForm.style.display === 'none') {
+                checkForm.style.display = 'block'
+            } else {
+                checkForm.style.display = 'none'
+            };
+        });
+
+        submitBtn.addEventListener('click', async (event) => {
+            const status = select.value;
+            let responseTime = rtInput.value;
+            responseTime = responseTime ? Number(responseTime) : null;
+            const response = await postServiceChecks(service.id, status, responseTime);
+            const checks = await getServiceChecks(service.id);
+            console.log('submit checks:', checks);
+            console.log('submit ul:', ul);
+            renderChecks(ul, checks);
+            checkForm.style.display = 'none'
+
+        });
+
+        details.addEventListener("toggle", async (event) => {
             if (!event.target.open) {
                 return
             };
             const uuid = event.target.dataset.serviceId;
             const ul = event.target.querySelector('.checks-list');
-            if (ul.children.length > 0) {
-                return
-            }
+            // if (ul.children.length > 0) {
+            //     return
+            // }
             ul.textContent = 'Loading checks...'
             const checks = await getServiceChecks(uuid);
+            console.log('checks received:', checks);
             renderChecks(ul, checks);
         });
-        container.appendChild(item);
+        container.appendChild(details);
+
     };
 
 };
 
 function renderChecks(ul, checks) {
+    ul.replaceChildren();
     if (checks.length == 0) {
         const li = document.createElement('li')
         li.textContent = "No checks yet"
