@@ -36,10 +36,16 @@ class Service(db.Model):
     )
 
     def to_dict(self):
+        latest = db.session.execute(
+            db.select(Check)
+            .where(Check.service_id == self.id)
+            .order_by(Check.created_at.desc())
+        ).scalar()
         return {
             "id": str(self.id),
             "name": self.name,
             "url": self.url,
+            "latest_check": latest.to_dict() if latest else None,
             "check_interval": self.check_interval_seconds,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
