@@ -5,26 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <link rel="stylesheet" href="css/pico.min.css">
-    <script src="main.js"></script>   
     <title>Hello world!</title>
   </head>
+  
   <body>
     <main class="container">
       <h1>Hello world!</h1>
-      <div #services-list>
-      <details>
-        <summary>
-          service 1
-        </summary>
-      </details>
-      <details>
-        <summary>
-          service 2
-        </summary>
-      </details>
+      <div id="services-container">
 
-    </div>
+      </div>
+      
+    <form id="add-service-form">
+        <fieldset>
+          <label >
+            Service name
+              <input 
+                name="name"
+                placeholder="Service name"
+              />
+          </label>
+          <label >
+            URL
+              <input 
+                type="url"
+                name="url"
+                placeholder="URL"
+              />
+          </label>
+          <label >
+            Check interval
+              <input 
+                type="number"
+                name="check_interval_seconds"
+                placeholder="Check interval"
+                min="100"
+              />
+          </label>
+        </fieldset>
+        <input
+          type="submit"
+          value="submit"
+        />
+      </form>
     </main>
-    
+  <script src="main.js"></script>  
   </body>
 </html>
