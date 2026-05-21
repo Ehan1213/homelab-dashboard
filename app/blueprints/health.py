@@ -9,6 +9,7 @@ health = Blueprint("health", __name__)
 
 
 @health.route("/health")
+@cross_origin()
 def hello_health():
     return jsonify(status="ok"), 200
 
