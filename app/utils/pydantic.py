@@ -16,5 +16,5 @@ class Status(str, Enum):
 
 
 class ValidateCheck(BaseModel):
-    status: Status = Status
+    status: Status = Field(Status)
     response_time: float | None = Field(None)

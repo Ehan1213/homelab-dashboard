@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request
 from pydantic import ValidationError
 from sqlalchemy.exc import OperationalError
-from utils.pydantic import ValidateCheck, ValidateService
 
 from app.models import Check, Service, db
+from app.utils.pydantic import ValidateCheck, ValidateService
 
 services = Blueprint("service", __name__)
 
