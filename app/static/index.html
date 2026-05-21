@@ -4,50 +4,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <link rel="stylesheet" href="css/pico.min.css">
-    <title>Hello world!</title>
+    <link rel="stylesheet" href="pico.min.css">
+    <title>Homelab Dashboard</title>
   </head>
   
   <body>
     <main class="container">
-      <h1>Hello world!</h1>
+      <h1>Homelab Dashboard</h1>
       <div id="services-container">
 
       </div>
       
-    <form id="add-service-form">
-        <fieldset>
-          <label >
-            Service name
-              <input 
-                name="name"
-                placeholder="Service name"
-              />
-          </label>
-          <label >
-            URL
-              <input 
-                type="url"
-                name="url"
-                placeholder="URL"
-              />
-          </label>
-          <label >
-            Check interval
-              <input 
-                type="number"
-                name="check_interval_seconds"
-                placeholder="Check interval"
-                min="100"
-              />
-          </label>
-        </fieldset>
+      <form id="add-service-form">
+          <label for="name">Service name</label>
+          <input id="name" name="name" placeholder="Service name"/>
+          
+          <label for="url">URL</label>
+          <input id="url" name="url" placeholder="URL"/>
+          <label for="check_interval_seconds">Check interval</label>
+          <input id="check_interval_seconds" type="number" name="check_interval_seconds" placeholder="Check interval" min="100"/>
         <input
           type="submit"
-          value="submit"
+          value="Submit"
         />
-      </form>
+     </form>
     </main>
-  <script src="main.js"></script>  
+    <script src="main.js"></script>  
   </body>
 </html>
