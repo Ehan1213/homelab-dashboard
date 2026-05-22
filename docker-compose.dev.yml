@@ -5,7 +5,7 @@ services:
   flask:
     build:
       context: .
-      dockerfile: app/flask-app.dockerfile
+      dockerfile: flask-app.dockerfile
     healthcheck:
       test: ["CMD", "python", "/app/utils/healthcheck.py"]
       interval: 30s

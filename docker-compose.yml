@@ -5,7 +5,7 @@ services:
   flask:
     build:
       context: .
-      dockerfile: app/flask-app.dockerfile
+      dockerfile: flask-app.dockerfile
     env_file:
       - .env
     healthcheck:
