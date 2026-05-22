@@ -4,7 +4,8 @@ A self-hosted service health monitoring dashboard built to demonstrate
 production-grade containerization and Flask API patterns.
 
 ![Demo GIF](docs/animation.gif)
-![Demo Screenshot](docs/demo.png)
+![Demo Screenshot](docs/demo.PNG)
+
 
 ## Architecture
 
