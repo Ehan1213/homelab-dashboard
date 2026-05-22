@@ -4,13 +4,15 @@ A self-hosted service health monitoring dashboard built to demonstrate
 production-grade containerization and Flask API patterns.
 
 ![Demo GIF](docs/animation.gif)
+![Demo Screenshot](docs/demo.png)
 
 ## Architecture
 
 ![Architecture Diagram](docs/architecture.png)
+Requests flow: Browser → nginx (port 80) → Flask app (internal network, port 5000) → Postgres (internal network, port 5432). nginx also serves static frontend assets directly without proxying to Flask.
 
 ## Docker Info
-![Docker Screenshot](docs/docker_inspect.JPG)
+![Docker Screenshot](docs/docker-inspect.JPG)
 
 ## Tech Stack
 
@@ -29,7 +31,8 @@ cp .env.example .env        # fill in your values
 docker compose up
 ```
 
-Open `http://localhost` in your browser.
+You'll see the dashboard at `http://localhost` in your browser.
+The API is at `http://localhost/api/services`.
 
 ## Environment Variables
 
@@ -43,9 +46,8 @@ SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://postgres:your-password@db:5432/you
 ```
 
 # Flask Dockerfiles
-    I used uv in this project if you are less familiar there is a pip
-    dockerfile with the requrired deps in a traditional requirements.txt
-    this must be kept in sync manually.
+I used uv in this project if you are less familiar there is a pip
+dockerfile with the requrired deps in a traditional requirements.txt this must be kept in sync manually.
 
 ## What This Demonstrates
 
